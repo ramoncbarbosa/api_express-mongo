@@ -48,7 +48,7 @@ app.post("/livros", (req, res)=>{
 });
 
 
-//alterar ou atualizar um registro existente com metodo put
+//alterar um registro o sobrescrevendo o existente com metodo put, diferente do metodo patch que atualiza
 app.put("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
   //pegando o livro do id index com titulo e trocando por titulo
