@@ -62,7 +62,7 @@ app.put("/livros/:id", (req, res)=>{
 app.delete("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
   livrosArray.splice(index, 1);
-  res.status(204).send("Livro removido com sucesso");
+  res.status(200).send("Livro removido com sucesso");
 })
 
 export default app;
