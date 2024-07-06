@@ -1,5 +1,6 @@
-import express, { json } from "express";
+import express from "express";
 import conectaDatabase from "./config/dbConnect.js";
+import livro from "./models/Livro.js";
 
 const conexao = await conectaDatabase();
 
@@ -13,63 +14,35 @@ conexao.once("open", ()=>{
 
 const app = express();
 
-//middleware = utilizado para ter acesso a requisicoes e resposta e modificar algumas coisas, neste caso server para parsear as requisicoes de body, convertendo de string para json para poder lidar
 app.use(express.json());
-
-const livrosArray = [
-  {
-    id: 1,
-    titulo: "O Senhor dos Aneis"
-  },
-  {
-    id: 2,
-    titulo: "O Hobbit"
-  }
-]
-
-
-//funcao para buscar livros via id
-function buscarLivros(id){
-  return livrosArray.findIndex(livro => {
-    //convertendo o id de string para numero
-    return livro.id === Number(id)
-  })
-}
 
 app.get("/", (req, res)=>{
   res.status(200).send("Curso de Express");
 });
 
-//status 200 = ok
-app.get("/livros", (req, res)=>{
-  res.status(200).json(livrosArray);
+app.get("/livros", async (req, res)=>{
+  const listaLivros = await livro.find({});
+  res.status(200).json(listaLivros);
 });
 
-//buscando livro via id com a funcao de buscar livros por id no params
 app.get("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
-  res.status(200).json(livrosArray[index])
+  res.status(200).json(livros[index])
 })
 
-//adicionando livros com metodo post
 app.post("/livros", (req, res)=>{
-  livrosArray.push(req.body);
-  //201 = cadastrado com sucesso
+  livros.push(req.body);
   res.status(201).send("livro cadastrado com sucesso")
 });
 
 
-//alterar um registro o sobrescrevendo o existente com metodo put, diferente do metodo patch que atualiza
 app.put("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
-  //pegando o livro do id index com titulo e trocando por titulo
-  livrosArray[index].titulo = req.body.titulo
-  res.status(200).json(livrosArray);
+  livros[index].titulo = req.body.titulo
+  res.status(200).json(livros);
 })
 
 
-//deletar um dado via id usando a funcao buscar livros para filtrar pelo id
-// 200 para ok e 204 para quando deletamos algo
 app.delete("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
   livrosArray.splice(index, 1);

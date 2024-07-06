@@ -1,6 +1,6 @@
+import "dotenv/config"
 import app from "./src/app.js";
 
-//posta a qual sera usada
 const PORT = 3000;
 
 app.listen(PORT, ()=>{
