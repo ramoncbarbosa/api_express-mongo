@@ -5,11 +5,11 @@ import livro from "./models/Livro.js";
 const conexao = await conectaDatabase();
 
 conexao.on("error", (erro)=>{
-  console.error("error de conexao:", erro);
+  console.error("error de conexão:", erro);
 });
 
 conexao.once("open", ()=>{
-  console.log("conexao com o banco realizada com sucesso");
+  console.log("conexão com o banco realizada com sucesso");
 })
 
 const app = express();
@@ -20,10 +20,6 @@ app.get("/", (req, res)=>{
   res.status(200).send("Curso de Express");
 });
 
-app.get("/livros", async (req, res)=>{
-  const listaLivros = await livro.find({});
-  res.status(200).json(listaLivros);
-});
 
 app.get("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
