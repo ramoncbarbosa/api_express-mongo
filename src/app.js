@@ -1,6 +1,6 @@
 import express from "express";
 import conectaDatabase from "./config/dbConnect.js";
-import livro from "./models/Livro.js";
+import routes from "./routes/index.js";
 
 const conexao = await conectaDatabase();
 
@@ -13,13 +13,7 @@ conexao.once("open", ()=>{
 })
 
 const app = express();
-
-app.use(express.json());
-
-app.get("/", (req, res)=>{
-  res.status(200).send("Curso de Express");
-});
-
+routes(app);
 
 app.get("/livros/:id", (req, res)=>{
   const index = buscarLivros(req.params.id);
