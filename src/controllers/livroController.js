@@ -1,28 +1,53 @@
-// importação do modelo Livro
-// para ser chamado pelo controller
-import livro from "../models/Livro.js";
-import {json} from "express";
+import Livro from "../models/Livro.js"; 
 
 class LivroController {
     static async listarLivros(req, res) {
         try {
-            // controller chama o model Livro através
-            // do método livro.find({})
-            const listaLivros = await livro.find({});
+            const listaLivros = await Livro.find({});
             res.status(200).json(listaLivros);
         } catch (erro) {
-            res.status(500).json({ message: `${erro.message} - falha na requisição` });
+            res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
         }
     }
-    static async CadastrarLivros(req, res) {
-        try{
-            const newBook = await livro.create(req.body);
-            res.status(201).json({messaage: 'criado com sucesso', livro: newBook})
-        } catch (erro){
-            res.status(500).json({mesage: `${erro.mesage} - Falha na Requisicao`});
-        }
-    }
-};
 
+    static async listarLivroPorId(req, res) {
+        try {
+            const id = req.params.id;
+            const livroLocalizado = await Livro.findById(id);
+            res.status(200).json(livroLocalizado);
+        } catch (erro) {
+            res.status(500).json({ message: `${erro.message} - Falha na Requisição de Buscar o Livro` });
+        }
+    }
+
+    static async CadastrarLivros(req, res) {
+        try {
+            const newBook = await Livro.create(req.body);
+            res.status(201).json({ message: 'Criado com sucesso', livro: newBook });
+        } catch (erro) {
+            res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
+        }
+    }
+
+    static async atualizarLivroPorId(req, res) {
+        try {
+            const id = req.params.id;
+            await Livro.findByIdAndUpdate(id, req.body);
+            res.status(200).json({ message: 'Atualização Realizada Com Sucesso!' });
+        } catch (erro) {
+            res.status(500).json({ message: `${erro.message} - Falha na Atualização do Livro` });
+        }
+    }
+
+    static async deleteBook(req, res) {
+        try {
+            const id = req.params.id;
+            await Livro.findByIdAndDelete(id);
+            res.status(200).json({ message: 'Livro Deletado com Sucesso!' });
+        } catch (erro) {
+            res.status(500).json({ message: `${erro.message} - Falha ao Deletar o Livro` });
+        }
+    }
+}
 
 export default LivroController;
