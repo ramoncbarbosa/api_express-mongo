@@ -10,42 +10,46 @@ class AuthorController {
     }
   };
 
-  static listarAutorPorId = async (req, res) => {
+  static listarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
       const autorLocalizado = await Autor.findById(id);
-      res.status(200).json(autorLocalizado);
+      if(autorLocalizado !== null){
+        res.status(200).send(autorLocalizado);
+      } else{
+        res.status(404).send({ message: "Falha na Requisição de Buscar o Autor, o ID Não Foi Lozalicado" });
+      }
     } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - Falha na Requisição de Buscar o Autor` });
+      next(erro);
     }
   };
 
-  static cadastrarAutores = async (req, res) => {
+  static cadastrarAutores = async (req, res, next) => {
     try {
       const newAuthor = await Autor.create(req.body);
       res.status(201).json({ message: "Autor criado com sucesso", autor: newAuthor });
     } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
+      next(erro);
     }
   };
 
-  static atualizarAutorPorId = async (req, res) => {
+  static atualizarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
       await Autor.findByIdAndUpdate(id, req.body);
       res.status(200).json({ message: "Atualização do Autor realizada com sucesso!" });
     } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - Falha na Atualização do Autor` });
+      next(erro);
     }
   };
 
-  static deletarAutor = async (req, res) => {
+  static deletarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
       await Autor.findByIdAndDelete(id);
       res.status(200).json({ message: "Autor deletado com sucesso!" });
     } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - Falha ao Deletar o Autor` });
+      next(erro);
     }
   };
 }
