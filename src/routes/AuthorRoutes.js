@@ -3,10 +3,18 @@ import AuthorController from "../controllers/AuthorController.js";
 
 const routes = express.Router();
 
-routes.get("/autores", AuthorController.listarAutores);
-routes.get("/autores/:id", AuthorController.listarAutorPorId);
-routes.post("/autores", AuthorController.cadastrarAutores);
-routes.put("/autores/:id", AuthorController.atualizarAutorPorId);
-routes.delete("/autores/:id", AuthorController.deletarAutor);
+// router.get("/autores", AuthorController.listarAutores);
+// router.get("/autores/:id", AuthorController.listarAutorPorId);
+// router.post("/autores", AuthorController.cadastrarAutores);
+// router.put("/autores/:id", AuthorController.atualizarAutorPorId);
+// router.delete("/autores/:id", AuthorController.deletarAutor);
+
+
+routes
+  .get("/autores", AuthorController.listarAutores)
+  .get("/autores/:id", AuthorController.listarAutorPorId)
+  .post("/autores", AuthorController.cadastrarAutores)
+  .put("/autores/:id", AuthorController.atualizarAutorPorId)
+  .delete("/autores/:id", AuthorController.deletarAutor);
 
 export default routes;

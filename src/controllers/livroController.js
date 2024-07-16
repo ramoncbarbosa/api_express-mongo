@@ -20,7 +20,7 @@ class LivroController {
         }
     }
 
-    static async CadastrarLivros(req, res) {
+    static async cadastrarLivro(req, res) {
         try {
             const newBook = await Livro.create(req.body);
             res.status(201).json({ message: 'Criado com sucesso', livro: newBook });
@@ -39,7 +39,7 @@ class LivroController {
         }
     }
 
-    static async deleteBook(req, res) {
+    static async excluirLivro(req, res) {
         try {
             const id = req.params.id;
             await Livro.findByIdAndDelete(id);
@@ -49,14 +49,13 @@ class LivroController {
         }
     }
 
-    //parametro para usar query para buscar uma editora
-    static async listarLivrosPorEditora(req, res){
+    static async listarLivrosPorEditora(req, res) {
         const editora = req.query.editora;
-        try{
-            const livrosPorEditora = await Livro.find({editora: editora});
+        try {
+            const livrosPorEditora = await Livro.find({ editora: editora });
             res.status(200).json(livrosPorEditora);
-        } catch(erro){
-            res.tatus(500).json({message: `${erro.message} - Não Encontrado`})
+        } catch (erro) {
+            res.status(500).json({ message: `${erro.message} - Não Encontrado` });
         }
     }
 }
