@@ -1,16 +1,16 @@
 import Autor from "../models/Author.js";
 
 class AuthorController {
-  static async listarAutores(req, res) {
+  static listarAutores = async (req, res) => {
     try {
       const listaAuthor = await Autor.find({});
       res.status(200).json(listaAuthor);
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
     }
-  }
+  };
 
-  static async listarAutorPorId(req, res) {
+  static listarAutorPorId = async (req, res) => {
     try {
       const id = req.params.id;
       const autorLocalizado = await Autor.findById(id);
@@ -18,19 +18,18 @@ class AuthorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição de Buscar o Autor` });
     }
-  }
+  };
 
-  static async cadastrarAutores(req, res) {
+  static cadastrarAutores = async (req, res) => {
     try {
       const newAuthor = await Autor.create(req.body);
       res.status(201).json({ message: "Autor criado com sucesso", autor: newAuthor });
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
     }
-  }
-    
+  };
 
-  static async atualizarAutorPorId(req, res) {
+  static atualizarAutorPorId = async (req, res) => {
     try {
       const id = req.params.id;
       await Autor.findByIdAndUpdate(id, req.body);
@@ -38,9 +37,9 @@ class AuthorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Atualização do Autor` });
     }
-  }
+  };
 
-  static async deletarAutor(req, res) {
+  static deletarAutor = async (req, res) => {
     try {
       const id = req.params.id;
       await Autor.findByIdAndDelete(id);
@@ -48,7 +47,7 @@ class AuthorController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha ao Deletar o Autor` });
     }
-  }
+  };
 }
 
 export default AuthorController;

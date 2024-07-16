@@ -1,16 +1,16 @@
-import Livro from "../models/Livro.js"; 
+import Livro from "../models/Livro.js";
 
 class LivroController {
-  static async listarLivros(req, res) {
+  static listarLivros = async (req, res) => {
     try {
       const listaLivros = await Livro.find({});
       res.status(200).json(listaLivros);
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
     }
-  }
+  };
 
-  static async listarLivroPorId(req, res) {
+  static listarLivroPorId = async (req, res) => {
     try {
       const id = req.params.id;
       const livroLocalizado = await Livro.findById(id);
@@ -18,18 +18,18 @@ class LivroController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição de Buscar o Livro` });
     }
-  }
+  };
 
-  static async cadastrarLivro(req, res) {
+  static cadastrarLivro = async (req, res) => {
     try {
       const newBook = await Livro.create(req.body);
       res.status(201).json({ message: "Criado com sucesso", livro: newBook });
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
     }
-  }
+  };
 
-  static async atualizarLivroPorId(req, res) {
+  static atualizarLivroPorId = async (req, res) => {
     try {
       const id = req.params.id;
       await Livro.findByIdAndUpdate(id, req.body);
@@ -37,9 +37,9 @@ class LivroController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Atualização do Livro` });
     }
-  }
+  };
 
-  static async excluirLivro(req, res) {
+  static excluirLivro = async (req, res) => {
     try {
       const id = req.params.id;
       await Livro.findByIdAndDelete(id);
@@ -47,9 +47,9 @@ class LivroController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha ao Deletar o Livro` });
     }
-  }
+  };
 
-  static async listarLivrosPorEditora(req, res) {
+  static listarLivrosPorEditora = async (req, res) => {
     const editora = req.query.editora;
     try {
       const livrosPorEditora = await Livro.find({ editora: editora });
@@ -57,7 +57,7 @@ class LivroController {
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Não Encontrado` });
     }
-  }
+  };
 }
 
 export default LivroController;
