@@ -1,5 +1,4 @@
-import mongoose from "mongoose"
-import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 //usado para estabelecer a conexeção com o bd mongo atlas e meu .env
 
