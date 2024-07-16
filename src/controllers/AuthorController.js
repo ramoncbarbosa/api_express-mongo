@@ -1,3 +1,4 @@
+import notFound from "../errors/notFound.js";
 import Autor from "../models/Author.js";
 
 class AuthorController {
@@ -17,7 +18,7 @@ class AuthorController {
       if(autorLocalizado !== null){
         res.status(200).send(autorLocalizado);
       } else{
-        res.status(404).send({ message: "Falha na Requisição de Buscar o Autor, o ID Não Foi Lozalicado" });
+        next(new notFound("Falha na Requisição de Buscar o Autor, o ID Não Foi Lozalicado" ));
       }
     } catch (erro) {
       next(erro);

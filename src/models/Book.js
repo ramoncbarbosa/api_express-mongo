@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const bookScheme = new mongoose.Schema({
-  id: mongoose.Schema.Types.ObjectId,
+  id: mongoose.Schema.Types.ObjectId,  
+  //ao envolver em método de array o dado do required, também se pode personalizar por exemplo o que saíra como mensagem caso não respeitem o required
   titulo: { type: String, required: [true, "O Título do Livro é Obrigatório!"] },
   editora: { type: String, required: [true, "A Editora é Obrigatória!"] },
   preco: { type: Number, required: false },
