@@ -37,9 +37,13 @@ class AuthorController {
   static atualizarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
-      await Autor.findByIdAndUpdate(id, req.body);
-      res.status(200).json({ message: "Atualização do Autor realizada com sucesso!" });
-    } catch (erro) {
+      const authorRes = await Autor.findByIdAndUpdate(id, req.body);
+      if(authorRes !== null){
+        res.status(200).json({ message: "Atualização do Autor realizada com sucesso!" });
+      } else{
+        next(new notFound("Id do Autor não Localizado"));
+      } 
+    }catch (erro) {
       next(erro);
     }
   };
@@ -47,8 +51,12 @@ class AuthorController {
   static deletarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
-      await Autor.findByIdAndDelete(id);
-      res.status(200).json({ message: "Autor deletado com sucesso!" });
+      const resultado = await Autor.findByIdAndDelete(id);
+      if(resultado !== null){
+        res.status(200).json({ message: "Autor deletado com sucesso!" });
+      } else{
+        next(new notFound("Id do Autor não Localizado"));
+      }
     } catch (erro) {
       next(erro);
     }
