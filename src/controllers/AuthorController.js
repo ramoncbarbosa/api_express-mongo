@@ -1,10 +1,10 @@
 import notFound from "../errors/notFound.js";
-import Autor from "../models/Author.js";
+import {Author} from "../models/index.js";
 
 class AuthorController {
   static listarAutores = async (req, res) => {
     try {
-      const listaAuthor = await Autor.find({});
+      const listaAuthor = await Author.find({});
       res.status(200).json(listaAuthor);
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
@@ -14,7 +14,7 @@ class AuthorController {
   static listarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const autorLocalizado = await Autor.findById(id);
+      const autorLocalizado = await Author.findById(id);
       if(autorLocalizado !== null){
         res.status(200).send(autorLocalizado);
       } else{
@@ -27,7 +27,7 @@ class AuthorController {
 
   static cadastrarAutores = async (req, res, next) => {
     try {
-      const newAuthor = await Autor.create(req.body);
+      const newAuthor = await Author.create(req.body);
       res.status(201).json({ message: "Autor criado com sucesso", autor: newAuthor });
     } catch (erro) {
       next(erro);
@@ -37,7 +37,7 @@ class AuthorController {
   static atualizarAutorPorId = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const authorRes = await Autor.findByIdAndUpdate(id, req.body);
+      const authorRes = await Author.findByIdAndUpdate(id, req.body);
       if(authorRes !== null){
         res.status(200).json({ message: "Atualização do Autor realizada com sucesso!" });
       } else{
@@ -51,7 +51,7 @@ class AuthorController {
   static deletarAutor = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const resultado = await Autor.findByIdAndDelete(id);
+      const resultado = await Author.findByIdAndDelete(id);
       if(resultado !== null){
         res.status(200).json({ message: "Autor deletado com sucesso!" });
       } else{
