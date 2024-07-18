@@ -1,5 +1,5 @@
 import notFound from "../errors/notFound.js";
-import {Books} from "../models/index.js";
+import {Author, Books} from "../models/index.js";
 
 class BooksController {
   static listarLivros = async (req, res, next) => {
@@ -62,23 +62,49 @@ class BooksController {
     }
   };
 
+
   static listarLivrosPorSearch = async (req, res, next) => {
-    const {editora, titulo} = req.query;
-
-    const regex = new RegExp(titulo, "i");
-
-    const search = {};
-    if(editora) search.editora = editora;
-    if(titulo) search.titulo = regex; //witch regex
-    // if(titulo) search.titulo = {$regex: titulo, $options: "i"}; //witch mongoose
-
     try {
-      const livrosPorEditora = await Books.find(search);
-      res.status(200).json(livrosPorEditora);
+      const search = await searchParametros(req.query);
+      if(search !== null){
+        const resFilter = await Books.find(search).populate("autor", "nome");
+        res.status(200).json(resFilter);
+      } else{
+        res.status(200).send([]);
+      }
     } catch (erro) {
       next(erro);
     }
-  };
+  };  
+   
 }
+
+async function searchParametros(parametros){
+  const { editora, titulo, minPages, maxPages, nomeAutor } = parametros;
+  let search = {};
+
+  if (editora) search.editora = editora;
+
+  if (titulo) search.titulo = { $regex: titulo, $options: "i" };
+
+  if (minPages || maxPages) search.numeroPaginas = {};
+  if (minPages) search.numeroPaginas.$gte = minPages;
+  if (maxPages) search.numeroPaginas.$lte = maxPages;
+
+  if (nomeAutor) {
+    const autor = await Author.findOne({ nome: nomeAutor });
+    if (autor) {
+      search.autor = autor._id;
+    } else {
+      console.log(`Autor "${nomeAutor}" não encontrado.`);
+      search = null;
+    }
+  }
+
+  return search;
+}
+
+
+
 
 export default BooksController;
