@@ -5,13 +5,20 @@ import incorrectRequest from "../errors/incorrectRequest.js";
 class BooksController {
   static listarLivros = async (req, res, next) => {
     try {
-      //metodos para paginação para mostrar quantos dados quero mostrar por página
-      let { limite = 10, page = 1 } = req.query; 
+      //metodos para paginação para mostrar quantos dados quero mostrar por pages com limite e page
+      //ordenando a visualizacao dos dados, neste caso usando o id como ordem junto do valor decrscente que -1
+      //use url: 3000/livros?ordenacao=titulo:1 or -1
+      let { limite = 10, page = 1, ordenacao = "_id:-1" } = req.query; 
+      let [campoOrdernacao, ordem] = ordenacao.split(":");
+
       limite = parseInt(limite);
       page = parseInt(page);
-
+      ordem = parseInt(ordem);
+      
+      //usando metodo sort para ordernar por titulo, 1= crescente e -1 descrescente, se pode ordernar por outros dados, mas sempre 1 e -1
       if(limite > 0 && page > 0){
         const listaLivros = await Books.find({})
+          .sort({[campoOrdernacao]: ordem})
           .skip((page-1) * limite)
           .limit(limite)
           .populate("autor")
