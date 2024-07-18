@@ -8,10 +8,12 @@ const bookScheme = new mongoose.Schema({
     enum: {values: ["Dream House"], message: "A Editora {VALUE} Não É um Valor Permitido!"} },
   preco: { type: Number, required: false },
   numeroPaginas: { type: Number,
-    min: [100, "O Número de Páginas deve estar entre 100 e 5.000. Valor fornecido {VALUE} "],
-    max: [5000, "O Número de Páginas deve estar entre 100 e 5.000. Valor fornecido {VALUE} "],
+    validate: {
+      validator: (valor) => {
+        return valor >= 10 && valor <= 5000;
+      }, message: "O Número de Páginas Deve Estar Entre 100 e 5000. Você Passou o Valor de: {VALUE}"},
     required: false },
-  autor: { type: mongoose.Schema.Types.ObjectId, ref: "autores", required: [true, "O Nome do(a) Autor(a) é Obrigatório!"]},
+  autor: { type: String, ref: "autores", required: [true, "O Nome do(a) Autor(a) é Obrigatório!"]},
 }, { versionKey: false });
 
 const Book = mongoose.model("books", bookScheme);
