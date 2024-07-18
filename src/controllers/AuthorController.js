@@ -2,10 +2,11 @@ import notFound from "../errors/notFound.js";
 import {Author} from "../models/index.js";
 
 class AuthorController {
-  static listarAutores = async (req, res) => {
+  static listarAutores = async (req, res, next) => {
     try {
-      const listaAuthor = await Author.find({});
-      res.status(200).json(listaAuthor);
+      const listaAuthor = Author.find({});
+      req.result = listaAuthor;
+      next(); //middleware pagination
     } catch (erro) {
       res.status(500).json({ message: `${erro.message} - Falha na Requisição` });
     }
