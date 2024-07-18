@@ -65,9 +65,12 @@ class BooksController {
   static listarLivrosPorSearch = async (req, res, next) => {
     const {editora, titulo} = req.query;
 
+    const regex = new RegExp(titulo, "i");
+
     const search = {};
     if(editora) search.editora = editora;
-    if(titulo) search.titulo = titulo;
+    if(titulo) search.titulo = regex; //witch regex
+    // if(titulo) search.titulo = {$regex: titulo, $options: "i"}; //witch mongoose
 
     try {
       const livrosPorEditora = await Books.find(search);
