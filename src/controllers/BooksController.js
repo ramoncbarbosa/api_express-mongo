@@ -1,5 +1,6 @@
 import notFound from "../errors/notFound.js";
-import {Author, Books} from "../models/index.js";
+import {Books} from "../models/index.js";
+import searchParametros from "../func/search.js";
 
 class BooksController {
   static listarLivros = async (req, res, next) => {
@@ -64,6 +65,21 @@ class BooksController {
   };
 
 
+  // static listarLivrosPorSearch = async (req, res, next) => {
+  //   try {
+  //     const search = await searchParametros(req.query);
+  //     if(search !== null){
+  //       const resFilter = Books.find(search).populate("autor");
+  //       req.result = resFilter;
+  //       next(); //middleware pagination
+  //     } else{
+  //       res.status(200).send([]);
+  //     }
+  //   } catch (erro) {
+  //     next(erro);
+  //   }
+  // };  
+
   static listarLivrosPorSearch = async (req, res, next) => {
     try {
       const search = await searchParametros(req.query);
@@ -81,30 +97,30 @@ class BooksController {
    
 }
 
-async function searchParametros(parametros){
-  const { editora, titulo, minPages, maxPages, nomeAutor } = parametros;
-  let search = {};
+// async function searchParametros(parametros){
+//   const { editora, titulo, minPages, maxPages, nomeAutor } = parametros;
+//   let search = {};
 
-  if (editora) search.editora = editora;
+//   if (editora) search.editora = editora;
 
-  if (titulo) search.titulo = { $regex: titulo, $options: "i" };
+//   if (titulo) search.titulo = { $regex: titulo, $options: "i" };
 
-  if (minPages || maxPages) search.numeroPaginas = {};
-  if (minPages) search.numeroPaginas.$gte = minPages;
-  if (maxPages) search.numeroPaginas.$lte = maxPages;
+//   if (minPages || maxPages) search.numeroPaginas = {};
+//   if (minPages) search.numeroPaginas.$gte = minPages;
+//   if (maxPages) search.numeroPaginas.$lte = maxPages;
 
-  if (nomeAutor) {
-    const autor = await Author.findOne({ nome: nomeAutor });
-    if (autor) {
-      search.autor = autor._id;
-    } else {
-      console.log(`Autor "${nomeAutor}" não encontrado.`);
-      search = null;
-    }
-  }
+//   if (nomeAutor) {
+//     const autor = await Author.findOne({ nome: nomeAutor });
+//     if (autor) {
+//       search.autor = autor._id;
+//     } else {
+//       console.log(`Autor "${nomeAutor}" não encontrado.`);
+//       search = null;
+//     }
+//   }
 
-  return search;
-}
+//   return search;
+// }
 
 
 
